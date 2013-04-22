@@ -15,7 +15,9 @@
 var querystring = require('querystring');
 var https = require('https');
 var prompt = require('prompt');
+var fs = require('fs');
 var ArgumentParser = require('argparse').ArgumentParser;
+
 //var ApacheJiraFetch = require('./apachejirafetch.js');
 
 var parser = new ArgumentParser({
@@ -37,6 +39,7 @@ baragonFetchParser.addArgument(['-i', '--issueid'], {type: 'string', action: 'st
 // Create mode parser 
 var baragonCreateParser = subparsers.addParser("create",{addHelp:true});
 baragonCreateParser.addArgument(['-s', '--safemode'],{action: 'storeTrue', help: "print post fields and data, but no request is sent"});
+baragonCreateParser.addArgument(['--jsonfile'],{type: 'string', action: 'store', help: "file containing a properly formated json string containing the data to create the issue from"});
 
 // Modify mode parser
 var baragonModParser = subparsers.addParser("mod",{addHelp:true});
@@ -75,7 +78,7 @@ var JiraRestTemplate = {
 }
 
 //  get apache jira password and username 
-var authPromptSchema = {
+var AuthPromptSchema = {
     properties : {
         name : {
             required : true
@@ -87,38 +90,49 @@ var authPromptSchema = {
     }
 }
 
+// get jira authentication
 prompt.start();
-prompt.get(authPromptSchema, function (err, result) {
+prompt.get(AuthPromptSchema, function (err, result) {
+    // to be sent over https
     var auth = 'Basic ' + new Buffer(result.name + ':' + result.password).toString('base64');
-    IssuePutOptions.headers.Authorization = auth;
-    rock (IssuePutOptions);
+    HtmlRequestDefaultOptions.headers.Authorization = auth;
+    rock (HtmlRequestDefaultOptions); // main 
 });
 
 /**
  * sees everything
  */
 function rock(requestOptions) {
-    // readData()
-    var data = JSON.stringify(createIssueRestData(),'utf8');
+    // read issue fields out of data file 
+    data = readJsonData(sessionOptions.jsonfile);
+    // create RESTful object from data and presets
+    var reststring = JSON.stringify(createIssueRestfulObject('12312420', data),'utf8');
 
     if (!sessionOptions.safemode) {
         console.log('Unsafe Mode');
         req = createRequest(requestOptions);
-        req.write(data);
+        req.write(reststring);
         req.end();
     } else {
         console.log(requestOptions);
-        console.log(createIssueRestData());
+        console.log(reststring);
     }
 }
 
-function createIssueRestData() {
-    JiraRestTemplate.fields.project.id = "12312420"; 
-    JiraRestTemplate.fields.summary = "RestFul Test Issue";
-    //JiraRestTemplate.fields.description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    JiraRestTemplate.fields.issuetype.name = "Bug";
-    return JiraRestTemplate;
+/**
+ *  
+ */
+function createIssueRestfulObject(pid, data) {
+    var robj = {};
+    robj.fields = {};
+    robj.fields.project = {'id':pid};
+    robj.fields.issuetype = {'name' : "Bug"}; 
+    for (var key in data) { 
+        robj.fields[key] = data[key]
+    }
+    return robj;
 }
+
 /**
  * creates issue query string from presets and dynamic data 
  */
@@ -130,12 +144,15 @@ function createIssueQueryString(data) {
 }
 
 /**
- * 
+ * expects valid file path, with file containing nothing but a valid json string 
  */
-function readData(data) {
-    return {
-        summary : "RestFul Test Issue",
-        description : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+function readJsonData(fileuri) {
+    var jsondata;
+    try {
+        var data = fs.readFileSync(fileuri, 'utf8', 'r');
+        return JSON.parse(data);
+    } catch (e) {
+        console.log(e);
     }
 }
 

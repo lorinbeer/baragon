@@ -14,4 +14,19 @@
 
 module.exports = function () {
 
+
+}
+
+/**
+ *
+ */
+exports.restfulObject(pid, issueFields) {
+    var robj = {};
+    robj.fields = {};
+    robj.fields.project = {'id':pid};
+    robj.fields.issuetype = {'name' : "Bug"};
+    for (var key in issueFields) {
+        robj.fields[key] = issueFields[key]
+    }
+    return robj;
 }
