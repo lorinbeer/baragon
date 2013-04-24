@@ -56,24 +56,6 @@ baragonModParser.setDefaults({'handler':modify});
 // Parse Args
 var sessionOptions = parser.parseArgs();
 
-// targeting Apache Cordova
-var PresetPostFields = {
-    'pid' : '12312420',
-    'issuetype' : 2,
-    'security' : -1
-};
-
-var HtmlRequestDefaultOptions = {
-    'host' : "issues.apache.org", 
-    'path' : "/jira/rest/api/latest/issue",
-    'method' : -1, // stub, autofails, needs to be updated by the specific request handler (fetch, mod, create)
-    'X-Atlassian-Token': 'no-check', 
-    'headers': {
-        // needs authentication header added before send
-        'Content-Type' : "application/json"
-    }
-}
-
 var JiraRestTemplate = {
     "fields" : {
         "project" : {

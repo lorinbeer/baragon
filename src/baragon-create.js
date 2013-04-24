@@ -13,7 +13,7 @@
  */
 
 var config = require('../config');
-//var common = require('baragon-common');
+var common = require('./baragon-common');
 /**
  *
  */
