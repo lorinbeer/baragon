@@ -104,43 +104,23 @@ prompt.get(AuthPromptSchema, function (err, result) {
     // to be sent over https
     var auth = 'Basic ' + new Buffer(result.name + ':' + result.password).toString('base64');
     HtmlRequestDefaultOptions.headers.Authorization = auth;
-    rock (HtmlRequestDefaultOptions); // main 
+    rock (); // main 
 });
 
 /**
  * sees everything
  */
-function rock(requestOptions) {
-    sessionOptions.handler();
+function rock() {
+
+    if (sessionOptions.handler) {
+        sessionOptions.handler(sessionOptions);
+    } else {
+        console.log("Error: Tell Baragon what to do!");
+        //display help
+    }
 
     // read issue fields out of data file 
-    data = readJsonData(sessionOptions.jsonfile);
-    // create RESTful object from data and presets
-    var reststring = JSON.stringify(createIssueRestfulObject('12312420', data),'utf8');
-
-    if (!sessionOptions.safemode) {
-        console.log('Unsafe Mode');
-        req = createRequest(requestOptions);
-        req.write(reststring);
-        req.end();
-    } else {
-        console.log(requestOptions);
-        console.log(reststring);
-    }
-}
-
-/**
- *  
- */
-function createIssueRestfulObject(pid, data) {
-    var robj = {};
-    robj.fields = {};
-    robj.fields.project = {'id':pid};
-    robj.fields.issuetype = {'name' : "Bug"}; 
-    for (var key in data) { 
-        robj.fields[key] = data[key]
-    }
-    return robj;
+//    data = readJsonData(sessionOptions.jsonfile);
 }
 
 /**
@@ -164,23 +144,4 @@ function readJsonData(fileuri) {
     } catch (e) {
         console.log(e);
     }
-}
-
-/**
- * creates a request and sets error callback
- */
-function createRequest(options) {
-    var req = https.request(options, function(res) {
-        res.setEncoding('utf8');
-        console.log("Status Code: " + res.statusCode);
-        console.log("Response Header: " + JSON.stringify(res.headers));
-        res.on('data', function (chunk) {
-            console.log('BODY: ' + chunk);
-        });
-    });
-
-    req.on('error', function(e) {
-        console.log('fuckup: ' + e.message);
-    });
-    return req
 }
