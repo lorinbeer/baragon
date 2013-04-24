@@ -13,7 +13,7 @@
  */
 
 var config = require('../config');
-
+//var common = require('baragon-common');
 /**
  *
  */
@@ -28,7 +28,7 @@ module.exports = function (options) {
     // 
     if (!options.safemode) {
         console.log('Unsafe Mode');
-        req = createRequest(requestOptions);
+        req = common.createRequest(requestOptions);
         req.write(reststring);
         req.end();
     } else {
@@ -49,23 +49,4 @@ function createIssueRestfulObject(pid, data) {
         robj.fields[key] = data[key]
     }
     return robj;
-}
-
-/**
- * creates a request and sets error callback
- */
-function createRequest(options) {
-    var req = https.request(options, function(res) {
-        res.setEncoding('utf8');
-        console.log("Status Code: " + res.statusCode);
-        console.log("Response Header: " + JSON.stringify(res.headers));
-        res.on('data', function (chunk) {
-            console.log('BODY: ' + chunk);
-        });
-    });
-
-    req.on('error', function(e) {
-        console.log('fuckup: ' + e.message);
-    });
-    return req
 }
