@@ -12,10 +12,24 @@
  * limitations under the License.
  */
 
-module.exports = function (htmlRequestOptions) {
+var config = require('../config');
+var common = require('baragon-common');
 
-// add method to request options
-//htmlRequestOptions['method'] : 'GET';
+module.exports = function (options) {
+    var data = {},
+        reststring = null,
+        req = null;
+
+    //
+    if (!options.safemode) {
+        console.log('Unsafe Mode');
+        req = common.createRequest(config);
+        //req.write(reststring);
+        req.end();
+    } else {
+        console.log(config);
+        console.log(reststring);
+    }
 
 
 }
