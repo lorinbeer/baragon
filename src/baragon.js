@@ -18,6 +18,10 @@ var prompt = require('prompt');
 var fs = require('fs');
 var ArgumentParser = require('argparse').ArgumentParser;
 
+var fetch = require('./baragon-fetch.js');
+var create = require('./baragon-create.js');
+var modify = require('./baragon-mod.js');
+
 //var ApacheJiraFetch = require('./apachejirafetch.js');
 
 var parser = new ArgumentParser({
@@ -35,19 +39,23 @@ var subparsers = parser.addSubparsers({
 var baragonFetchParser = subparsers.addParser("fetch",{addHelp:true});
 baragonFetchParser.addArgument(['-s', '--safemode'],{action: 'storeTrue',help: "print post fields and data, but no request is sent"});
 baragonFetchParser.addArgument(['-i', '--issueid'], {type: 'string', action: 'store', help: "specify the issue to fetch by Jira Issue ID, required",required: true});
+baragonFetchParser.setDefaults({'handler':fetch});
 
 // Create mode parser 
 var baragonCreateParser = subparsers.addParser("create",{addHelp:true});
 baragonCreateParser.addArgument(['-s', '--safemode'],{action: 'storeTrue', help: "print post fields and data, but no request is sent"});
 baragonCreateParser.addArgument(['--jsonfile'],{type: 'string', action: 'store', help: "file containing a properly formated json string containing the data to create the issue from"});
+baragonCreateParser.setDefaults({'handler':create});
 
 // Modify mode parser
 var baragonModParser = subparsers.addParser("mod",{addHelp:true});
 baragonModParser.addArgument(['-s', '--safemode'],{action: 'storeTrue', help: "print post fields and data, but no request is sent"});
 baragonModParser.addArgument(['-i', '--issueid'],{type: 'string', action: 'store', help: "specify the issue to modify by Jira Issue ID, required",required: true});
+baragonModParser.setDefaults({'handler':modify});
 
+// Parse Args
 var sessionOptions = parser.parseArgs();
-console.log(sessionOptions);
+
 // targeting Apache Cordova
 var PresetPostFields = {
     'pid' : '12312420',
@@ -103,6 +111,8 @@ prompt.get(AuthPromptSchema, function (err, result) {
  * sees everything
  */
 function rock(requestOptions) {
+    sessionOptions.handler();
+
     // read issue fields out of data file 
     data = readJsonData(sessionOptions.jsonfile);
     // create RESTful object from data and presets

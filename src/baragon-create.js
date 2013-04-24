@@ -20,6 +20,7 @@ module.exports = function () {
 /**
  *
  */
+/*
 exports.restfulObject(pid, issueFields) {
     var robj = {};
     robj.fields = {};
@@ -29,4 +30,4 @@ exports.restfulObject(pid, issueFields) {
         robj.fields[key] = issueFields[key]
     }
     return robj;
-}
+}*/

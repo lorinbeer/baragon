@@ -15,7 +15,7 @@
 module.exports = function (htmlRequestOptions) {
 
 // add method to request options
-htmlRequestOptions['method'] : 'GET';
+//htmlRequestOptions['method'] : 'GET';
 
 
 }
