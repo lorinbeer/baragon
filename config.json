@@ -1,3 +1,16 @@
 {
-
+  "target-host" : {
+    "host" : "issues.apache.org",
+    "path" : "/jira/rest/api/latest/issue",
+    "method" : -1,
+    "X-Atlassian-Token": "no-check",
+    "headers": {
+        "Content-Type" : "application/json"
+      }
+  },
+  "target-tracker" : {
+    "pid" : "12312420",
+    "issuetype" : 2,
+    "security" : -1
+  }
 }
