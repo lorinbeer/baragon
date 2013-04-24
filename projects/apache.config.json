@@ -1,0 +1,13 @@
+{
+    "template" : {
+        "fields" : {
+            "project" : {
+                "id" : -1
+            },
+            "issuetype" : {
+                "name" : "Bug"
+            }
+        }
+    }
+}
+
