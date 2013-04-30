@@ -8,14 +8,7 @@
         "Content-Type" : "application/json"
       }
   },
-  "projectId" : "12312420",
-  "projectKey" : "CB",
   "fetchTemplate" : {
     "jql" : {}
-  },
-  "targetTracker" : {
-    "pid" : "12312420",
-    "issuetype" : 2,
-    "security" : -1
   }
 }
