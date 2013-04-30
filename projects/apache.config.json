@@ -1,14 +1,9 @@
 {
-  "projectId" : "12312420",
-  "projectKey" : "CB",
-    "template" : {
-        "fields" : {
-            "project" : {
-                "id" : -1
-            },
-            "issuetype" : {
-                "name" : "Bug"
-            }
+    "projectId" : "12312420",
+    "projectKey" : "CB",
+    "defaults" : {
+        "issuetype" : {
+            "name" : "Bug"
         }
     }
 }
