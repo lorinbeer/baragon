@@ -5,6 +5,7 @@
     "method" : -1,
     "X-Atlassian-Token": "no-check",
     "headers": {
+        "Authorization" : "foobar",
         "Content-Type" : "application/json"
       }
   },
