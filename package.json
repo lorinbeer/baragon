@@ -1,36 +1,34 @@
 {
-  "name" : "baragon",
-  "version" : "0.0.1",
-  "description" : jira command line interface for procedural issue reading, creation, and modification",
-  "author" : {
-    "name" : "Lorin Beer,
-    "email" : "lorin@adobe.com" 
-    "url" : "ensufire.com/" 
-  },
-  "keywords" : "jira cli",
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/lorinbeer/baragon.git"
-  },
-  "bugs" : { 
-    "url"   : "https://github.com/lorinbeer/baragon/issues",
-    "email" : "lorin.beer.dev@gmail.com"
-  },
-  "license" : "apache 2.0",
-  "files" : [src],
-  "main" : "src/baragon.js",
-  "bin" : "./src/baragon.js",
-  "man" : "",
-  "dependencies" : {
-    {
-
+    "name" : "baragon",
+    "version" : "0.0.1",
+    "description" : "jira command line interface for procedural issue reading, creation, and modification",
+    "author" : {
+        "name" : "Lorin Beer",
+        "email" : "lorin@adobe.com", 
+        "url" : "ensufire.com" 
+    },
+    "keywords" : "jira cli",
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/lorinbeer/baragon.git"
+    },
+    "bugs" : { 
+        "url"   : "https://github.com/lorinbeer/baragon/issues",
+        "email" : "lorin.beer.dev@gmail.com"
+    },
+    "license" : "apache 2.0",
+    "files" : ["lib"],
+    "main" : "src/baragon.js",
+    "bin" : "./src/baragon.js",
+    "man" : "",
+    "dependencies" : {
+        "argparse" : "0.1.x",
+        "prompt" : "0.2.x" 
+    },
+    "devDependencies" : {
+        "jasmine-node" : "1.7.x"
+    },
+    "engines" : {
+        "node" : "0.10.x"
     }
-  },
-  "devDependencies" : {
-    {
-    }
-  },
-  "engines" : {
-    "node" : "0.10.x"
-  }
 }
