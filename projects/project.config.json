@@ -1,0 +1,10 @@
+{
+    "projectId" : "<pid>",
+    "projectKey" : "<pkey>",
+    "defaults" : {
+        "issuetype" : {
+            "name" : "Bug"
+        }
+    }
+}
+
