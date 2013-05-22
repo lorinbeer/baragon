@@ -15,10 +15,10 @@
 var prompt = require('prompt');
 var ArgumentParser = require('argparse').ArgumentParser;
 
-var fetch = require('./baragon-fetch.js');
-var create = require('./baragon-create.js');
-var modify = require('./baragon-mod.js');
-
+var fetch = require('./lib/baragon-fetch.js');
+var create = require('./lib/baragon-create.js');
+var modify = require('./lib/baragon-mod.js');
+var assign = require('./lib/baragon-assign.js');
 
 // argument parser
 var parser = new ArgumentParser({
@@ -45,11 +45,11 @@ baragonFetchParser.setDefaults({'handler':fetch});
 // Create mode parser 
 var baragonCreateParser = subparsers.addParser("create",{addHelp:true});
 baragonCreateParser.addArgument(['-s', '--safemode'],{action: 'storeTrue', help: "print post fields and data, but no request is sent"});
+baragonCreateParser.addArgument(['-i', '--interactive'],{action: 'storeTrue', help: "begins an interactive prompt for submitting issues, issue data specified with other flags will be used as defaults"});
 baragonCreateParser.addArgument(['--jsonfile'],{type: 'string', action: 'store', help: "file containing a properly formated json string containing the data to create the issue from, specifying issue fields explicitly will overwrite duplicates specified in file"});
 baragonCreateParser.addArgument(['--data'],{type: 'string', action: 'store', help: "json data string containing issue data, specifying issue fields explicitly will overwrite duplicates specified here"});
 baragonCreateParser.addArgument(['--summary'],{type: 'string', action: 'store', help: "Issue Summary"});
 baragonCreateParser.addArgument(['--description'],{type: 'string', action: 'store', help: "Issue Description"});
-
 baragonCreateParser.setDefaults({'handler':create});
 
 // Modify mode parser
@@ -59,8 +59,15 @@ baragonModParser.addArgument(['-i', '--issueid'],{type: 'string', action: 'store
 baragonModParser.addArgument(['-k', '--issuekey'],{type: 'string', action: 'store', help: "specify the issue to modify by Jira Issue Key"});
 baragonModParser.addArgument(['-t', '--transition'],{type: 'string', action: 'store', help: "transition id"});
 baragonModParser.addArgument(['-m', '--message'],{type: 'string', action: 'store', help: "comment to leave on issue"});
-
 baragonModParser.setDefaults({'handler':modify});
+
+// Assign mode parser
+var baragonAssignParser = subparsers.addParser("assign",{addHelp:true});
+baragonAssignParser.addArgument(['-s', '--safemode'],{action:'storeTrue', help: "print post fields and data, but no request is sent"});
+baragonAssignParser.addArgument(['-i', '--interactive'],{action: 'storeTrue', help: "interactive mode"});
+baragonAssignParser.addArgument(['-u', '--userid'],{type: 'string', action: 'store', help: "jira user id to assign issues to"});
+baragonAssignParser.addArgument(['-t', '--issue'],{type: 'string', action: 'store', help: "jira issue id to modify"});
+baragonAssignParser.setDefaults({'handler':assign});
 
 // Parse Args
 var sessionOptions = parser.parseArgs();
